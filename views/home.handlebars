@@ -1,0 +1,28 @@
+<h1 class="mt-5">Fediverse Explorer <sup><span class="badge rounded-pill text-bg-info">Beta</span></sup></h1>
+<p class="lead">Browse most recent public posts across the fediverse.</p>
+<p>This tool is a prototype and under active development. Currently only supports Mastodon instances. No data is saved on this server.</p>
+<form id="tag-browser">
+    <div class="input-group mb-3">
+        <div class="form-floating">
+            <input id="tag" type="text" class="form-control" name="tag" placeholder="music" value="dataviz">
+            <label for="tag">Tag</label>
+        </div>
+        <button class="btn btn-outline-secondary" type="submit" id="browse">Browse</button>
+    </div>
+    <div class="form-floating">
+        <textarea id="instances" class="form-control" style="min-height: 8rem;" rows="14" placeholder="mastodon.social,pawoo.net,mstdn.jp,mastodon.cloud">mastodon.social
+pawoo.net
+mstdn.jp
+mastodon.cloud
+mstdn.social
+mas.to
+mastodon.art
+techhub.social
+mastodon.lol
+fosstodon.org
+vis.social</textarea>
+        <label for="floatingTextarea">Instances</label>
+    </div>
+</form>
+<div id="results" class="container mt-4 mb-4 g-0">
+</div>                
