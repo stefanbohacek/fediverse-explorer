@@ -1,9 +1,6 @@
 import express  from 'express';
 import * as cheerio from 'cheerio';
 
-import Parser from 'rss-parser';
-const parser = new Parser();
-
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -66,10 +63,9 @@ router.get('/', (req, res) => {
                                     // console.log(item);
                                 });
                             });
-                            let feed = await parser.parseURL(`${instance}/tags/${req.query.tag}.rss`);
+
                             const response = {}
                             // console.log(feed);
-    
                             
                             response[instance] = feedItems;
                             resolve(response);                            
