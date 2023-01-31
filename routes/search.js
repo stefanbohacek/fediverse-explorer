@@ -28,8 +28,6 @@ router.get('/', (req, res) => {
             requests.push(
                 new Promise((resolve, reject) => {
                     (async () => {
-
-
                         const search = async (instance, tag) => {
                             let results = [];
                             try {
@@ -41,39 +39,43 @@ router.get('/', (req, res) => {
                                 return results;
                             }
                         }
-                        
-                        search(instance, req.query.tag).then(xml => {
-                            const $ = cheerio.load(xml, {
-                                xmlMode: true
+
+                        try {
+                            search(instance, req.query.tag).then(xml => {
+                                const $ = cheerio.load(xml, {
+                                    xmlMode: true
+                                });
+    
+                                $('item').each((i, feedItem) => {
+                                    const item = {
+                                        'guid': $(feedItem).find('guid').text(),
+                                        'link': $(feedItem).find('link').text(),
+                                        'pubDate': $(feedItem).find('pubDate').text(),
+                                        'content': $(feedItem).find('description').text()
+                                    };
+    
+                                    const $media = $(feedItem).find('media\\:content');
+                                    const mediaURL = $media.attr('url');
+    
+                                    if (mediaURL){
+                                        item['media_url'] = mediaURL;
+                                        item['media_type'] = $media.attr('type').split('/')[0];
+                                        item['media_description'] = $media.find('media\\:description').text();
+                                    }
+                                    feedItems.push(item);
+                                    console.log(item);
+                                });
                             });
-
-                            $('item').each((i, feedItem) => {
-                                const item = {
-                                    'guid': $(feedItem).find('guid').text(),
-                                    'link': $(feedItem).find('link').text(),
-                                    'pubDate': $(feedItem).find('pubDate').text(),
-                                    'content': $(feedItem).find('description').text()
-                                };
-
-                                const $media = $(feedItem).find('media\\:content');
-                                const mediaURL = $media.attr('url');
-
-                                if (mediaURL){
-                                    item['media_url'] = mediaURL;
-                                    item['media_type'] = $media.attr('type').split('/')[0];
-                                    item['media_description'] = $media.find('media\\:description').text();
-                                }
-                                feedItems.push(item);
-                                console.log(item);
-                            });
-                        });
-                        let feed = await parser.parseURL(`${instance}/tags/${req.query.tag}.rss`);
-                        const response = {}
-                        // console.log(feed);
-
-                        
-                        response[instance] = feedItems;
-                        resolve(response);
+                            let feed = await parser.parseURL(`${instance}/tags/${req.query.tag}.rss`);
+                            const response = {}
+                            // console.log(feed);
+    
+                            
+                            response[instance] = feedItems;
+                            resolve(response);                            
+                        } catch (error) {
+                            resolve([]);
+                        }                        
                     })();
                 })
             );
