@@ -97,7 +97,7 @@ router.get('/', (req, res) => {
             });
 
             res.send(posts.sort((a, b) => {
-                return (a.isoDate > b.isoDate) ? -1 : ((a.isoDate < b.isoDate) ? 1 : 0);
+                return (a.pubDate > b.pubDate) ? -1 : ((a.pubDate < b.pubDate) ? 1 : 0);
             }));
         });
     } else {
