@@ -6,7 +6,6 @@ import search from './search.js';
 const showSearchResults = (tagBrowserForm) => {
     const tagField = document.getElementById('tag');
     const instanceList = document.getElementById('instances');
-    const browseBtn = document.getElementById('browse');
     const resultsContainer = document.getElementById('results');
 
     toggleFormFields(tagBrowserForm, false);

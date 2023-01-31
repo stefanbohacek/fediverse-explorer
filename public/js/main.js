@@ -8,6 +8,7 @@ onReady(() => {
     const tagField = document.getElementById('tag');
     const instanceList = document.getElementById('instances');
     const resetInstanceListBtn = document.getElementById('reset-instance-list');
+    const browseBtn = document.getElementById('browse');
 
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -51,4 +52,7 @@ onReady(() => {
         }
     });
 
+    if (tagField.value === 'introduction'){
+        browseBtn.click();
+    }
 });
