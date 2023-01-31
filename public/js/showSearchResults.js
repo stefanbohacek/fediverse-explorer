@@ -29,7 +29,7 @@ const showSearchResults = (tagBrowserForm) => {
                         switch (post.media_type) {
                             case 'image':
                                 attachmentHTML = `<a href="${post.link}" target="_blank">
-                                    <img onload="updateMasonryLayout()" src="${post.media_url}" class="card-img-top" alt="">
+                                    <img onload="updateMasonryLayout()" src="${post.media_url}" class="w-100" alt="">
                                 </a>`;
                                 break;
                             default:
