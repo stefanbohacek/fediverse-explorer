@@ -97,7 +97,10 @@ router.get('/', (req, res) => {
             });
 
             res.send(posts.sort((a, b) => {
-                return (a.pubDate > b.pubDate) ? -1 : ((a.pubDate < b.pubDate) ? 1 : 0);
+                const aPubDate = new Date(a.pubDate);
+                const bPubDate = new Date(b.pubDate);
+
+                return (aPubDate > bPubDate) ? -1 : ((aPubDate < bPubDate) ? 1 : 0);
             }));
         });
     } else {
