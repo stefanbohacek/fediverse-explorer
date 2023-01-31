@@ -52,7 +52,7 @@ onReady(() => {
         }
     });
 
-    if (tagField.value === 'introduction'){
-        browseBtn.click();
+    if (tagField.value){
+        browseBtn.click();        
     }
 });
