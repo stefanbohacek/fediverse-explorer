@@ -9,7 +9,7 @@ This tool is a prototype and under active development. Currently only supports M
 This tool parses the built-in RSS feed for each searched tag and selected instances. 
 
 ```
-https://mastodon.social/tags/dataviz.rss
+https://mastodon.social/tags/introduction.rss
 ```
 
 ## Development
