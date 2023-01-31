@@ -9,24 +9,37 @@ onReady(() => {
     const instanceList = document.getElementById('instances');
     const resetInstanceListBtn = document.getElementById('reset-instance-list');
 
-    const savedTag = getCookie('tag');
-    const savedInstanceList = getCookie('instanceList');
-    
-    if (savedTag){
-        tagField.value = savedTag;
-    }
 
-    if (savedInstanceList){
-        instanceList.value = savedInstanceList.replaceAll(',', '\n');
+    const urlParams = new URLSearchParams(window.location.search);
+    const tagParam = urlParams.get('tag')
+
+    if (tagParam){
+        tagField.value = tagParam;
+    } else {
+        const savedTag = getCookie('tag');
+        const savedInstanceList = getCookie('instanceList');
+        
+        if (savedTag){
+            tagField.value = savedTag;
+        }
+    
+        if (savedInstanceList){
+            instanceList.value = savedInstanceList.replaceAll(',', '\n');
+        }
     }
+    
 
     tagBrowserForm.addEventListener('submit', (ev) => {
         ev.preventDefault();
 
-        setCookie('tag', tagField.value.trim(), 365);
+        const tagName = tagField.value.trim();
+
+        window.history.replaceState(null, null, `?tag=${tagName}`);
+
+        setCookie('tag', tagName, 365);
         setCookie('instanceList', instanceList.value.trim().replaceAll('\n', ','), 365);
 
-        showSearchResults(tagBrowserForm)
+        showSearchResults(tagBrowserForm);
     });
 
     resetInstanceListBtn.addEventListener('click', (ev) => {
