@@ -17,7 +17,7 @@ const showSearchResults = (tagBrowserForm) => {
             tag: tag,
             instances: instanceList.value.trim().split('\n') || instanceList.placeholder.split(',')
         }, resultsContainer).then(results => {
-            // console.log(results);
+            console.log(results);
             if (results && results.length){
                 let resultsHTML = '<div class="row">';
             
@@ -48,7 +48,7 @@ const showSearchResults = (tagBrowserForm) => {
                     //TODO: Quick workaround for CWs.
 
                     if (postContent.includes('<strong>Content warning:</strong>')){
-                        postContent = postContent.replace('<p><strong>Content warning:</strong>', '<details><summary>')
+                        postContent = postContent.replace('<p><strong>Content warning:</strong>', '<details onclick="updateMasonryLayout(1)"><summary>')
                                                  .replace('</p><hr /><p>', '</summary><p>');
                         postContent += '</details>';
                     }

@@ -30,8 +30,6 @@ onReady(() => {
         instanceList.value = savedInstanceList.replaceAll(',', '\n');
     }
 
-    console.log(getCookie('instanceList'))
-
     tagBrowserForm.addEventListener('submit', (ev) => {
         ev.preventDefault();
 
@@ -41,8 +39,6 @@ onReady(() => {
 
         setCookie('tag', tagName, 365);
         setCookie('instanceList', instanceList.value.trim().replaceAll('\n', ','), 365);
-
-        console.log(getCookie('instanceList'))
 
         showSearchResults(tagBrowserForm);
     });
