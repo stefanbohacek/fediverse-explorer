@@ -1,7 +1,10 @@
 import express  from 'express';
+import NodeCache from 'node-cache';
 import * as cheerio from 'cheerio';
 
 const router = express.Router();
+// const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60, maxKeys: 100 } );
+const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
 
 const search = async (instance, tag) => {
     let results = [];
@@ -19,6 +22,7 @@ router.get('/', (req, res) => {
     let response = {};
     
     if (req.query.tag){
+        const tag = req.query.tag;
         let instances = [];
         response.data = {};
         
@@ -28,44 +32,51 @@ router.get('/', (req, res) => {
             instances = ['https://mastodon.social', 'https://pawoo.net', 'https://mstdn.jp', 'https://mastodon.cloud'];
         }
 
-        // console.log({tag: req.query.tag, instances});
+        // console.log({tag, instances});
         
         const requests = [];
         instances.forEach(instance => {
-            // console.log(`${instance}/tags/${req.query.tag}.rss`);
+            // console.log(`${instance}/tags/${tag}.rss`);
             requests.push(
                 new Promise((resolve, reject) => {
                     (async () => {
+                        const cacheKey = `feed:${instance}:${tag}`;
                         let feedItems = [];
+
+                        const cachedFeedItems = appCache.get(cacheKey);
+                        if (cachedFeedItems == undefined){
+                            await search(instance, tag).then(xml => {
+                                const $ = cheerio.load(xml, {
+                                    xmlMode: true
+                                });
+    
+                                $('item').each((i, feedItem) => {
+                                    const item = {
+                                        'guid': $(feedItem).find('guid').text(),
+                                        'link': $(feedItem).find('link').text(),
+                                        'pubDate': $(feedItem).find('pubDate').text(),
+                                        'content': $(feedItem).find('description').text()
+                                    };
+    
+                                    const $media = $(feedItem).find('media\\:content');
+                                    const mediaURL = $media.attr('url');
+    
+                                    if (mediaURL){
+                                        item['media_url'] = mediaURL;
+                                        item['media_type'] = $media.attr('type').split('/')[0];
+                                        item['media_description'] = $media.find('media\\:description').text();
+                                    }
+                                    feedItems.push(item);
+                                    // console.log(item);
+                                });
+                            });
+                        } else {
+                            feedItems = cachedFeedItems;
+                        }
                         
-                        await search(instance, req.query.tag).then(xml => {
-                            const $ = cheerio.load(xml, {
-                                xmlMode: true
-                            });
-
-                            $('item').each((i, feedItem) => {
-                                const item = {
-                                    'guid': $(feedItem).find('guid').text(),
-                                    'link': $(feedItem).find('link').text(),
-                                    'pubDate': $(feedItem).find('pubDate').text(),
-                                    'content': $(feedItem).find('description').text()
-                                };
-
-                                const $media = $(feedItem).find('media\\:content');
-                                const mediaURL = $media.attr('url');
-
-                                if (mediaURL){
-                                    item['media_url'] = mediaURL;
-                                    item['media_type'] = $media.attr('type').split('/')[0];
-                                    item['media_description'] = $media.find('media\\:description').text();
-                                }
-                                feedItems.push(item);
-                                // console.log(item);
-                            });
-                        });
                         const response = {}
-                        // console.log(feed);
                         response[instance] = feedItems;
+                        const success = appCache.set(cacheKey, feedItems );
                         resolve(response);
                     })();
                 })
