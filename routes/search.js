@@ -1,6 +1,9 @@
 import express  from 'express';
 import * as cheerio from 'cheerio';
 
+import Parser from 'rss-parser';
+const parser = new Parser();
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -16,12 +19,12 @@ router.get('/', (req, res) => {
             instances = ['https://mastodon.social', 'https://pawoo.net', 'https://mstdn.jp', 'https://mastodon.cloud'];
         }
 
-        // console.log({tag: req.query.tag, instances});
+        console.log({tag: req.query.tag, instances});
         
         const requests = [];
         instances.forEach(instance => {
             let feedItems = [];
-            // console.log(`${instance}/tags/${req.query.tag}.rss`);
+            console.log(`${instance}/tags/${req.query.tag}.rss`);
             requests.push(
                 new Promise((resolve, reject) => {
                     (async () => {
@@ -36,42 +39,39 @@ router.get('/', (req, res) => {
                                 return results;
                             }
                         }
-
-                        try {
-                            search(instance, req.query.tag).then(xml => {
-                                const $ = cheerio.load(xml, {
-                                    xmlMode: true
-                                });
-    
-                                $('item').each((i, feedItem) => {
-                                    const item = {
-                                        'guid': $(feedItem).find('guid').text(),
-                                        'link': $(feedItem).find('link').text(),
-                                        'pubDate': $(feedItem).find('pubDate').text(),
-                                        'content': $(feedItem).find('description').text()
-                                    };
-    
-                                    const $media = $(feedItem).find('media\\:content');
-                                    const mediaURL = $media.attr('url');
-    
-                                    if (mediaURL){
-                                        item['media_url'] = mediaURL;
-                                        item['media_type'] = $media.attr('type').split('/')[0];
-                                        item['media_description'] = $media.find('media\\:description').text();
-                                    }
-                                    feedItems.push(item);
-                                    // console.log(item);
-                                });
+                        
+                        search(instance, req.query.tag).then(xml => {
+                            const $ = cheerio.load(xml, {
+                                xmlMode: true
                             });
 
-                            const response = {}
-                            // console.log(feed);
-                            
-                            response[instance] = feedItems;
-                            resolve(response);                            
-                        } catch (error) {
-                            resolve([]);
-                        }                        
+                            $('item').each((i, feedItem) => {
+                                const item = {
+                                    'guid': $(feedItem).find('guid').text(),
+                                    'link': $(feedItem).find('link').text(),
+                                    'pubDate': $(feedItem).find('pubDate').text(),
+                                    'content': $(feedItem).find('description').text()
+                                };
+
+                                const $media = $(feedItem).find('media\\:content');
+                                const mediaURL = $media.attr('url');
+
+                                if (mediaURL){
+                                    item['media_url'] = mediaURL;
+                                    item['media_type'] = $media.attr('type').split('/')[0];
+                                    item['media_description'] = $media.find('media\\:description').text();
+                                }
+                                feedItems.push(item);
+                                console.log(item);
+                            });
+                        });
+                        let feed = await parser.parseURL(`${instance}/tags/${req.query.tag}.rss`);
+                        const response = {}
+                        // console.log(feed);
+
+                        
+                        response[instance] = feedItems;
+                        resolve(response);
                     })();
                 })
             );
