@@ -19,12 +19,12 @@ router.get('/', (req, res) => {
             instances = ['https://mastodon.social', 'https://pawoo.net', 'https://mstdn.jp', 'https://mastodon.cloud'];
         }
 
-        console.log({tag: req.query.tag, instances});
+        // console.log({tag: req.query.tag, instances});
         
         const requests = [];
         instances.forEach(instance => {
             let feedItems = [];
-            console.log(`${instance}/tags/${req.query.tag}.rss`);
+            // console.log(`${instance}/tags/${req.query.tag}.rss`);
             requests.push(
                 new Promise((resolve, reject) => {
                     (async () => {
@@ -63,7 +63,7 @@ router.get('/', (req, res) => {
                                         item['media_description'] = $media.find('media\\:description').text();
                                     }
                                     feedItems.push(item);
-                                    console.log(item);
+                                    // console.log(item);
                                 });
                             });
                             let feed = await parser.parseURL(`${instance}/tags/${req.query.tag}.rss`);
