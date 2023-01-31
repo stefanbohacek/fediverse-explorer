@@ -12,12 +12,12 @@ const showSearchResults = (tagBrowserForm) => {
 
     const tag = tagField.value.trim();
     if (tag){
-        console.log(instanceList.value.split('\n'));
+        // console.log(instanceList.value.split('\n'));
         search({
             tag: tag,
             instances: instanceList.value.trim().split('\n') || instanceList.placeholder.split(',')
         }, resultsContainer).then(results => {
-            console.log(results);
+            // console.log(results);
             if (results && results.length){
                 let resultsHTML = '<div class="row">';
             
@@ -42,6 +42,16 @@ const showSearchResults = (tagBrowserForm) => {
                     // post.contentSnippet
 
                     const username = domain.pathname.split('/')[1];
+                    let postContent = post.content.replaceAll('<a ', '<a target="_blank" ')
+                                                  .replaceAll('class="invisible"', 'class="d-none"');
+
+                    //TODO: Quick workaround for CWs.
+
+                    if (postContent.includes('<strong>Content warning:</strong>')){
+                        postContent = postContent.replace('<p><strong>Content warning:</strong>', '<details><summary>')
+                                                 .replace('</p><hr /><p>', '</summary><p>');
+                        postContent += '</details>';
+                    }
 
                     resultsHTML += `
                     <div class="col-sm-6 col-lg-4 mt-3 mb-3" data-user="${username}@${domain.host}">
@@ -55,7 +65,7 @@ const showSearchResults = (tagBrowserForm) => {
                             ${attachmentHTML}
                             <div class="card-body">
                                 <div class="card-text">
-                                ${post.content.replaceAll('<a ', '<a target="_blank" ').replaceAll('class="invisible"', 'class="d-none"')}
+                                ${postContent}
                                 </div>
                             </div>
                             <div class="card-footer text-muted">
