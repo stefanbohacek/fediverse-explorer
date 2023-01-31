@@ -18,17 +18,19 @@ onReady(() => {
         tagField.value = tagParam;
     } else {
         const savedTag = getCookie('tag');
-        const savedInstanceList = getCookie('instanceList');
         
         if (savedTag){
             tagField.value = savedTag;
         }
-    
-        if (savedInstanceList){
-            instanceList.value = savedInstanceList.replaceAll(',', '\n');
-        }
     }
-    
+
+    const savedInstanceList = getCookie('instanceList');
+
+    if (savedInstanceList){
+        instanceList.value = savedInstanceList.replaceAll(',', '\n');
+    }
+
+    console.log(getCookie('instanceList'))
 
     tagBrowserForm.addEventListener('submit', (ev) => {
         ev.preventDefault();
@@ -39,6 +41,8 @@ onReady(() => {
 
         setCookie('tag', tagName, 365);
         setCookie('instanceList', instanceList.value.trim().replaceAll('\n', ','), 365);
+
+        console.log(getCookie('instanceList'))
 
         showSearchResults(tagBrowserForm);
     });
