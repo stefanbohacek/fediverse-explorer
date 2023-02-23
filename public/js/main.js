@@ -7,6 +7,7 @@ onReady(() => {
     const tagBrowserForm = document.getElementById('tag-browser');
     const tagField = document.getElementById('tag');
     const instanceList = document.getElementById('instances');
+    const userInstance = document.getElementById('user-instance');
     const resetInstanceListBtn = document.getElementById('reset-instance-list');
     const browseBtn = document.getElementById('browse');
 
@@ -30,6 +31,12 @@ onReady(() => {
         instanceList.value = savedInstanceList.replaceAll(',', '\n');
     }
 
+    const savedUserInstance = getCookie('userInstance');
+
+    if (savedUserInstance){
+        userInstance.value = savedUserInstance;
+    }
+
     tagBrowserForm.addEventListener('submit', (ev) => {
         ev.preventDefault();
 
@@ -39,6 +46,7 @@ onReady(() => {
 
         setCookie('tag', tagName, 365);
         setCookie('instanceList', instanceList.value.trim().replaceAll('\n', ','), 365);
+        setCookie('userInstance', userInstance.value.trim(), 365);
 
         showSearchResults(tagBrowserForm);
     });
