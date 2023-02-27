@@ -8,6 +8,7 @@ const showSearchResults = (tagBrowserForm) => {
     const instanceList = document.getElementById('instances');
     const userInstanceField = document.getElementById('user-instance');
     const resultsContainer = document.getElementById('results');
+    const placeholders = document.getElementById('placeholders');
 
     toggleFormFields(tagBrowserForm, false);
 
@@ -20,10 +21,14 @@ const showSearchResults = (tagBrowserForm) => {
 
     if (tag){
         // console.log(instanceList.value.split('\n'));
+        placeholders.classList.remove('d-none');
+
         search({
             tag: tag,
             instances: instanceList.value.trim().split('\n') || instanceList.placeholder.split(',')
         }, resultsContainer).then(results => {
+            placeholders.classList.add('d-none');
+
             // console.log(results);
             if (results && results.length){
                 let resultsHTML = '<div class="row">';
