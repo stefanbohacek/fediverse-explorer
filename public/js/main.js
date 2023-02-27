@@ -2,15 +2,17 @@ import onReady from './onReady.js';
 import showSearchResults from './showSearchResults.js';
 import setCookie from './setCookie.js';
 import getCookie from './getCookie.js';
+import enableDarkMode from './darkMode.js';
+
 
 onReady(() => {
+    enableDarkMode();
     const tagBrowserForm = document.getElementById('tag-browser');
     const tagField = document.getElementById('tag');
     const instanceList = document.getElementById('instances');
     const userInstance = document.getElementById('user-instance');
     const resetInstanceListBtn = document.getElementById('reset-instance-list');
     const browseBtn = document.getElementById('browse');
-
 
     const urlParams = new URLSearchParams(window.location.search);
     const tagParam = urlParams.get('tag')

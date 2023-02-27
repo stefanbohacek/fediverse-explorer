@@ -24,7 +24,7 @@ const showSearchResults = (tagBrowserForm) => {
             tag: tag,
             instances: instanceList.value.trim().split('\n') || instanceList.placeholder.split(',')
         }, resultsContainer).then(results => {
-            console.log(results);
+            // console.log(results);
             if (results && results.length){
                 let resultsHTML = '<div class="row">';
             
