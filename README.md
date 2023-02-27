@@ -10,7 +10,7 @@ This tool is a prototype and under active development. Currently only supports M
 ## Features
 
 - browse hashtags across multiple Mastodon instances
-- view posts from your own instance
+- open posts from your own instance
 - automatic dark mode
 
 ## How it works
