@@ -4,11 +4,9 @@ import setCookie from './setCookie.js';
 import getCookie from './getCookie.js';
 import enableDarkMode from './darkMode.js';
 
-
 onReady(() => {
     enableDarkMode();
 
-    const placeholders = document.getElementById('placeholders');
     const tagBrowserForm = document.getElementById('tag-browser');
     const tagField = document.getElementById('tag');
     const instanceList = document.getElementById('instances');
@@ -43,7 +41,6 @@ onReady(() => {
 
     tagBrowserForm.addEventListener('submit', (ev) => {
         ev.preventDefault();
-        placeholders.classList.remove('d-none');
 
         const tagName = tagField.value.trim();
 
