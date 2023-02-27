@@ -69,7 +69,7 @@ const showSearchResults = (tagBrowserForm) => {
 
                     resultsHTML += `
                     <div class="col-sm-6 col-lg-4 mt-3 mb-3" data-user="${username}@${domain.host}">
-                        <div class="card">
+                        <div class="card shadow-sm">
                             <div class="card-header">
                             <a href="https://${domain.host}/${username}" class="link-dark fw-bold text-muted text-decoration-none" target="_blank">
                                 <h5 class="card-title">${username}</h5>
