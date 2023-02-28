@@ -1,6 +1,7 @@
 import express  from 'express';
 import NodeCache from 'node-cache';
 import * as cheerio from 'cheerio';
+import getKnownInstances from '../modules/getKnownInstances.js';
 
 const router = express.Router();
 // const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60, maxKeys: 100 } );
@@ -18,12 +19,13 @@ const search = async (instance, tag) => {
     }
 }
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     let response = {};
     
     if (req.query.tag){
         const tag = req.query.tag;
         let instances = [];
+        let knownInstances = [];
         response.data = {};
         
         if (req.query.instances){
@@ -31,6 +33,15 @@ router.get('/', (req, res) => {
         } else {
             instances = ['https://mastodon.social', 'https://pawoo.net', 'https://mstdn.jp', 'https://mastodon.cloud'];
         }
+
+        // TODO: Filtering out instances known to mastodon.social should speed things up, but leads to missing content instead.
+        // if (instances.includes('https://mastodon.social')){
+        //     knownInstances = await getKnownInstances('mastodon.social', appCache);
+        // }
+
+        // instances = instances.filter((instance) => {
+        //     return !knownInstances.includes(instance);
+        // } );
 
         // console.log({tag, instances});
         
@@ -76,7 +87,7 @@ router.get('/', (req, res) => {
                         
                         const response = {}
                         response[instance] = feedItems;
-                        const success = appCache.set(cacheKey, feedItems );
+                        const success = appCache.set(cacheKey, feedItems);
                         resolve(response);
                     })();
                 })
