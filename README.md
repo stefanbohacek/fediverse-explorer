@@ -29,5 +29,7 @@ https://mastodon.social/tags/introduction.rss
 
 ```sh
 npm install
-nodemon -L
+npm run dev
+# or directly
+# nodemon -L
 ```
