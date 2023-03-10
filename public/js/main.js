@@ -5,6 +5,7 @@ import getCookie from './getCookie.js';
 import enableDarkMode from './darkMode.js';
 
 onReady(() => {
+    const pageTitle = document.title;
     enableDarkMode();
 
     const tagBrowserForm = document.getElementById('tag-browser');
@@ -45,6 +46,7 @@ onReady(() => {
         const tagName = tagField.value.trim();
 
         window.history.replaceState(null, null, `?tag=${tagName}`);
+        document.title = `#${tagName} | ${pageTitle}`;
 
         setCookie('tag', tagName, 365);
         setCookie('instanceList', instanceList.value.trim().replaceAll('\n', ','), 365);
