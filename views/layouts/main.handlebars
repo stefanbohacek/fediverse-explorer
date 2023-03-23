@@ -29,6 +29,7 @@
         <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
         <meta name="theme-color" content="#712cf9"> -->
         <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
 </head>
 <body data-bs-theme="dark" class="d-flex flex-column h-100 overflow-y-scroll">
     <main class="flex-shrink-0">
@@ -36,11 +37,7 @@
           {{{body}}}
         </div>
     </main>
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <span class="text-muted">Created by <a target="_blank" href="https://stefanbohacek.online/@stefan">Stefan Bohacek</a> | <a target="_blank" href="https://github.com/stefanbohacek/fediverse-explorer">View source</a></span>
-        </div>
-    </footer>
+    {{> footer }}
     <script type="module" src="js/main.js" async></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 </body>
