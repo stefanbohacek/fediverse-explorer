@@ -1,7 +1,7 @@
 ![A tinted screenshot of the Fediverse Explorer interface](public/images/fediverse-explorer-thumbnail.png)
 # Fediverse Explorer
 
-Browse most recent public posts across the fediverse.
+Browse most recent public posts across the fediverse by hashtag.
 
 This tool is a prototype and under active development. Currently only supports Mastodon instances, but the results will include posts from instances known by the selected instances, including non-Mastodon ones. No data is saved on the server outside of the currently viewed results being briefly cached for performance reasons.
 

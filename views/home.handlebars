@@ -1,16 +1,17 @@
 <h1 class="mt-5">
     Fediverse Explorer
-        <sup><span class="badge rounded-pill text-bg-info">Beta</span></sup>
-    </h1>
-<p class="lead mb-5">
-    Browse most recent public posts across the fediverse. <a target="_blank" href="https://github.com/stefanbohacek/fediverse-explorer/">Learn more about the project</a>
+    <sup><span class="badge rounded-pill text-bg-info">Beta</span></sup>
+</h1>
+<p class="lead mb-0">
+    Browse most recent public posts across the fediverse by hashtag.
+</p>
+<p class="mb-5">
+    <a target="_blank" href="https://github.com/stefanbohacek/fediverse-explorer/">Learn more about the project</a>
 </p>
 <form id="tag-browser">
     <div class="input-group mb-4">
-        <div class="form-floating">
-            <input id="tag" type="text" class="form-control" name="tag" placeholder="music" value="introduction">
-            <label for="tag">Tag</label>
-        </div>
+        <span class="input-group-text">#</span>
+        <input id="tag" type="text" class="form-control" name="tag" placeholder="tag" value="introduction">
         <button class="btn btn-outline-secondary" type="submit" id="browse">Browse</button>
     </div>
     <details>
