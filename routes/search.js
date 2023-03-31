@@ -2,6 +2,8 @@ import express  from 'express';
 import NodeCache from 'node-cache';
 import * as cheerio from 'cheerio';
 import getKnownInstances from '../modules/getKnownInstances.js';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 // const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60, maxKeys: 100 } );
@@ -46,6 +48,13 @@ router.get('/', async (req, res) => {
         // console.log({tag, instances});
         
         const requests = [];
+
+        let spam = [];
+
+        if (process.env.SPAM){
+            spam = process.env.SPAM.split(',');
+        }
+
         instances.forEach(instance => {
             // console.log(`${instance}/tags/${tag}.rss`);
             requests.push(
@@ -62,23 +71,29 @@ router.get('/', async (req, res) => {
                                 });
     
                                 $('item').each((i, feedItem) => {
-                                    const item = {
-                                        'guid': $(feedItem).find('guid').text(),
-                                        'link': $(feedItem).find('link').text(),
-                                        'pubDate': $(feedItem).find('pubDate').text(),
-                                        'content': $(feedItem).find('description').text()
-                                    };
-    
-                                    const $media = $(feedItem).find('media\\:content');
-                                    const mediaURL = $media.attr('url');
-    
-                                    if (mediaURL){
-                                        item['media_url'] = mediaURL;
-                                        item['media_type'] = $media.attr('type').split('/')[0];
-                                        item['media_description'] = $media.find('media\\:description').text();
+                                    const guid = $(feedItem).find('guid').text();
+                                    const idArray = guid.split('/');
+                                    const id = `${idArray[3]}@${idArray[2]}`;
+
+                                    if (!spam.includes(id)){
+                                        const item = {
+                                            guid,
+                                            link: $(feedItem).find('link').text(),
+                                            pubDate: $(feedItem).find('pubDate').text(),
+                                            content: $(feedItem).find('description').text()
+                                        };
+        
+                                        const $media = $(feedItem).find('media\\:content');
+                                        const mediaURL = $media.attr('url');
+        
+                                        if (mediaURL){
+                                            item['media_url'] = mediaURL;
+                                            item['media_type'] = $media.attr('type').split('/')[0];
+                                            item['media_description'] = $media.find('media\\:description').text();
+                                        }
+                                        feedItems.push(item);
+                                        // console.log(item);
                                     }
-                                    feedItems.push(item);
-                                    // console.log(item);
                                 });
                             });
                         } else {
