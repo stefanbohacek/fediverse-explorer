@@ -48,11 +48,16 @@ router.get('/', async (req, res) => {
         // console.log({tag, instances});
         
         const requests = [];
+        let spamIDs = [];
 
-        let spam = [];
+        if (process.env.SPAM_IDS){
+            spamIDs = process.env.SPAM_IDS.split(',');
+        }
 
-        if (process.env.SPAM){
-            spam = process.env.SPAM.split(',');
+        let spamHashtags = [];
+
+        if (process.env.SPAM_HASHTAGS){
+            spamHashtags = process.env.SPAM_HASHTAGS.split(',');
         }
 
         instances.forEach(instance => {
@@ -75,24 +80,39 @@ router.get('/', async (req, res) => {
                                     const idArray = guid.split('/');
                                     const id = `${idArray[3]}@${idArray[2]}`;
 
-                                    if (!spam.includes(id)){
-                                        const item = {
-                                            guid,
-                                            link: $(feedItem).find('link').text(),
-                                            pubDate: $(feedItem).find('pubDate').text(),
-                                            content: $(feedItem).find('description').text()
-                                        };
-        
-                                        const $media = $(feedItem).find('media\\:content');
-                                        const mediaURL = $media.attr('url');
-        
-                                        if (mediaURL){
-                                            item['media_url'] = mediaURL;
-                                            item['media_type'] = $media.attr('type').split('/')[0];
-                                            item['media_description'] = $media.find('media\\:description').text();
+                                    if (!spamIDs.includes(id)){
+                                        const content = $(feedItem).find('description').text();
+                                        const contentLowerCase = content.toLowerCase();
+                                        let isHashtagSpam = false;
+
+                                        spamHashtags.forEach(hashtag => {
+                                            const hashtagTag = `#${hashtag}`.toLowerCase();
+                                            const hashtagSpan = `#<span>${hashtag}`.toLowerCase();
+
+                                            if (contentLowerCase.includes(hashtagTag) || contentLowerCase.includes(hashtagSpan)){
+                                                isHashtagSpam = true;
+                                            }
+                                        });
+
+                                        if (!isHashtagSpam){
+                                            const item = {
+                                                guid,
+                                                link: $(feedItem).find('link').text(),
+                                                pubDate: $(feedItem).find('pubDate').text(),
+                                                content
+                                            };
+            
+                                            const $media = $(feedItem).find('media\\:content');
+                                            const mediaURL = $media.attr('url');
+            
+                                            if (mediaURL){
+                                                item['media_url'] = mediaURL;
+                                                item['media_type'] = $media.attr('type').split('/')[0];
+                                                item['media_description'] = $media.find('media\\:description').text();
+                                            }
+                                            feedItems.push(item);
+                                            // console.log(item);
                                         }
-                                        feedItems.push(item);
-                                        // console.log(item);
                                     }
                                 });
                             });
