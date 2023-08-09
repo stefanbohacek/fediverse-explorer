@@ -55,7 +55,17 @@ const showSearchResults = (tagBrowserForm) => {
                     // post.content
                     // post.contentSnippet
 
-                    const username = domain.pathname.split('/')[1];
+                    console.log('post.guid', post.guid);
+
+                    let username;
+
+                    if (post.guid.includes('@')){
+                        username = domain.pathname.split('/')[1];
+
+                    } else {
+                        username = 'account';
+                    }
+
                     let postContent = post.content.replaceAll('<a ', '<a target="_blank" ')
                                                   .replaceAll('class="invisible"', 'class="d-none"');
 
