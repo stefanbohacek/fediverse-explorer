@@ -43,8 +43,11 @@ const showSearchResults = (tagBrowserForm) => {
                         switch (post.media_type) {
                             case 'image':
                                 attachmentHTML = `<a href="${postLink}" target="_blank">
-                                    <img onload="updateMasonryLayout()" src="${post.media_url}" class="w-100" alt="">
+                                <img onload="updateMasonryLayout()" src="${post.media_url}" class="w-100" alt="">
                                 </a>`;
+                                break;
+                            case 'audio':
+                                attachmentHTML = `<audio class="w-100 p-1 mt-2" onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="audio/mp3"></audio>`;
                                 break;
                             default:
                                 attachmentHTML = `<video onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="video/mp4"></video>`;
