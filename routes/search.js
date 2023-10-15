@@ -15,7 +15,7 @@ const search = async (instance, tag) => {
     const resp = await fetch(`${instance}/tags/${tag}.rss`, {
       headers: {
         "User-Agent":
-          "Fediverse Explorer by @stefan@stefanbohacek.online; fediverse-explorer.stefanbohacek.dev",
+          "Fediverse Explorer by @stefan@stefanbohacek.online; fediverse-explorer.stefanbohacek.dev; stefan@stefanbohacek.com",
       },
     });
     const xml = await resp.text();
