@@ -8,8 +8,7 @@ const getKnownInstances = async (instance, appCache) => {
       console.log(`https://${instance}/api/v1/instance/peers`);
       const resp = await fetch(`https://${instance}/api/v1/instance/peers`, {
         headers: {
-          "User-Agent":
-            "Fediverse Explorer by @stefan@stefanbohacek.online; fediverse-explorer.stefanbohacek.dev; stefan@stefanbohacek.com",
+          "User-Agent": "Fediverse Explorer https://fediverse-explorer.stefanbohacek.dev",
         },        
       });
       knownInstances = await resp.json();
