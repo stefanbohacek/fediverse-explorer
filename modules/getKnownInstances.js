@@ -6,7 +6,12 @@ const getKnownInstances = async (instance, appCache) => {
   if (cachedKnownInstances == undefined){
     try {
       console.log(`https://${instance}/api/v1/instance/peers`);
-      const resp = await fetch(`https://${instance}/api/v1/instance/peers`);
+      const resp = await fetch(`https://${instance}/api/v1/instance/peers`, {
+        headers: {
+          "User-Agent":
+            "Fediverse Explorer by @stefan@stefanbohacek.online; fediverse-explorer.stefanbohacek.dev",
+        },        
+      });
       knownInstances = await resp.json();
     } catch (error) {
         console.log(error);
