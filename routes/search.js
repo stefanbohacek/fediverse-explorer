@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
         if (req.query.instances){
             instances = req.query.instances.split(',').map(instance => instance.trim().startsWith('http') ? instance : `https://${instance}` );
         } else {
-            instances = ['https://mastodon.social', 'https://pawoo.net', 'https://mstdn.jp', 'https://mastodon.cloud'];
+            instances = ['https://mastodon.social', 'https://mstdn.jp', 'https://mastodon.cloud'];
         }
 
         // TODO: Filtering out instances known to mastodon.social should speed things up, but leads to missing content instead.
