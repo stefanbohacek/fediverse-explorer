@@ -66,10 +66,9 @@ const showSearchResults = (tagBrowserForm) => {
 
           // post.content
           // post.contentSnippet
-
-          console.log("post.guid", post.guid);
-
+          // console.log("post", post);
           // let username = "???";
+
           let username = "unknown account";
           let usernameKnown = false;
 
@@ -81,6 +80,20 @@ const showSearchResults = (tagBrowserForm) => {
           let postContent = post.content
             .replaceAll("<a ", '<a target="_blank" ')
             .replaceAll('class="invisible"', 'class="d-none"');
+
+          if (postContent.includes("<hr>")) {
+            const postContentSplit = postContent.split("<hr>");
+            const postContentCW = postContentSplit.shift();
+            postContent = /* html */ `
+                <details onclick="updateMasonryLayout(1)">
+                  <summary>${postContentCW.replaceAll(
+                    "<p>",
+                    "<p class='d-inline'>"
+                  )}</summary>
+                  ${postContentSplit.join("")}
+                </details>
+              `;
+          }
 
           //TODO: Quick workaround for CWs.
 
