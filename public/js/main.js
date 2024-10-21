@@ -3,10 +3,12 @@ import showSearchResults from './showSearchResults.js';
 import setCookie from './setCookie.js';
 import getCookie from './getCookie.js';
 import enableDarkMode from './darkMode.js';
+import pauseAudio from './pauseAudio.js';
 
 onReady(() => {
     const pageTitle = document.title;
     enableDarkMode();
+    pauseAudio();
 
     const tagBrowserForm = document.getElementById('tag-browser');
     const tagField = document.getElementById('tag');
