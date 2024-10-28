@@ -36,7 +36,7 @@ const showSearchResults = (tagBrowserForm) => {
 
       // console.log(results);
       if (results && results.length) {
-        let resultsHTML = '<div class="row">';
+        let resultsHTML = /* html */ `<div class="row">`;
 
         results.forEach((post) => {
           const domain = new URL(post.guid);
@@ -50,16 +50,22 @@ const showSearchResults = (tagBrowserForm) => {
 
           if (post.media_url) {
             switch (post.media_type) {
-              case "image":
-                attachmentHTML = `<a href="${postLink}" target="_blank">
-                                <img onload="updateMasonryLayout()" src="${post.media_url}" class="w-100" alt="">
-                                </a>`;
-                break;
               case "audio":
-                attachmentHTML = `<audio class="w-100 p-1 mt-2" onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="audio/mp3"></audio>`;
+                attachmentHTML = /* html */ `
+                  <audio class="w-100 p-1 mt-2" onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="audio/mp3"></audio>
+                `;
+                break;
+              case "video":
+                attachmentHTML = /* html */ `
+                  <video onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="video/mp4"></video>
+                `;
                 break;
               default:
-                attachmentHTML = `<video onloadeddata="updateMasonryLayout()" controls><source src="${post.media_url}" type="video/mp4"></video>`;
+                attachmentHTML = /* html */ `
+                  <a href="${postLink}" target="_blank">
+                    <img onload="updateMasonryLayout()" src="${post.media_url}" class="w-100" alt="">
+                  </a>
+                `;
                 break;
             }
           }
@@ -87,8 +93,8 @@ const showSearchResults = (tagBrowserForm) => {
             postContent = /* html */ `
                 <details onclick="updateMasonryLayout(1)">
                   <summary>${postContentCW.replaceAll(
-                    "<p>",
-                    "<p class='d-inline'>"
+                    /* html */ `<p>`,
+                    /* html */ `<p class='d-inline'>`
                   )}</summary>
                   ${postContentSplit.join("")}
                 </details>
@@ -97,7 +103,7 @@ const showSearchResults = (tagBrowserForm) => {
 
           //TODO: Quick workaround for CWs.
 
-          if (postContent.includes("<strong>Content warning:</strong>")) {
+          if (postContent.includes(/* html */ `<strong>Content warning:</strong>`)) {
             postContent = postContent
               .replace(
                 /* html */ `<p><strong>Content warning:</strong>`,
